@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-10">
+    <div class="max-w-xl mx-auto bg-white p-8 rounded shadow">
+        <h1 class="text-2xl font-bold mb-6 text-center">QR Code Generator</h1>
+        <form method="POST" class="space-y-4">
+            <input name="data" required placeholder="Enter text or URL..."
+                class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-400">
+
+            <div class="flex gap-4">
+                <input name="color" type="color" class="w-12 h-12 p-0 border rounded" title="Pick QR color">
+                <input name="scale" type="number" min="1" max="20" value="5" class="w-24 border rounded px-2" title="Size (Scale)">
+            </div>
+
+            <button type="submit"
+                class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 w-full">
+                Generate QR Code
+            </button>
+        </form>
+
+        {% if file %}
+        <div class="mt-6 text-center">
+            <h2 class="text-lg font-semibold">Your QR Code</h2>
+            <img src="{{ url_for('static', filename='qr_codes/' + file) }}" class="mx-auto my-4">
+            <a href="{{ url_for('download', filename=file) }}"
+               class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded inline-block">
+               Download
+            </a>
+        </div>
+        {% endif %}
+
+        {% if history %}
+        <div class="mt-10">
+            <h3 class="text-md font-semibold mb-2">History</h3>
+            <div class="grid grid-cols-3 gap-4">
+                {% for f in history %}
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename='qr_codes/' + f) }}" class="w-full border rounded">
+                    <a href="{{ url_for('download', filename=f) }}" class="text-sm text-blue-600">Download</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
